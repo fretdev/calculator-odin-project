@@ -1,0 +1,136 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+:root {
+  /* ─── Backgrounds ─── */
+  --background: #0B0F14;
+  --surface: #111820;
+  --surface-elevated: #18212B;
+
+  /* ─── Text ─── */
+  --text-primary: #F5F7FA;
+  --text-secondary: #8B98A7;
+  --text-muted: #5D6977;
+
+  /* ─── Calculator Keys ─── */
+  --key: #1A232D;
+  --key-hover: #222E3A;
+  --key-active: #2B3947;
+
+  /* ─── Operators ─── */
+  --operator: #5B5CE2;
+  --operator-hover: #696AF0;
+  --operator-active: #4D4EC9;
+
+  /* ─── Equals / Primary Action ─── */
+  --primary: #7C5CFC;
+  --primary-hover: #8B70FF;
+  --primary-active: #6848E8;
+
+  /* ─── Accent ─── */
+  --accent: #22D3EE;
+
+  /* ─── Borders / Effects ─── */
+  --border: #26313D;
+  --border-subtle: #1C2630;
+  --shadow: rgba(0, 0, 0, 0.35);
+
+  /* ─── Status ─── */
+  --danger: #F87171;
+  --success: #34D399;
+}
+
+body{
+    background: var(--background);
+    display: flex;
+    justify-content: center;
+    padding-top: 5rem;
+}
+.container{
+    width: 24rem;
+    background: var(--surface);
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 25px var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+.display{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    width: 100%;
+    height: 8rem;
+    background: var(--surface-elevated);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+.input{
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+.output{
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+.buttons{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    justify-items: center;
+    padding: 1.25rem;
+    margin-top: 0.5rem;
+    gap: 0.75rem;
+}
+.btn,.clear-btn,.delete-btn{
+    width: 100%;
+    height: 3.5rem;
+    font-size: 1.5rem;
+    background: var(--key);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--background 0.2s ease, transform 0.1s ease);
+}
+.btn:hover{
+    background: var(--key-hover);
+}
+.btn:active{
+    background: var(--key-active);
+    transform: scale(0.97);
+}
+.operators-btns,.delete-btn{
+    color: var(--operator);
+}
+.operators-btns:hover,.delete-btn:hover{
+    background: var(--operator-hover);
+    color: var(--text-primary);
+}
+.equals-btn{
+    background: var(--primary);
+    color: var(--text-primary);
+}
+.equals-btn:hover{
+    background: var(--primary-hover);
+}
+.equals-btn:active{
+    background: var(--primary-active);
+}
+.clear-btn{
+    color: var(--danger);
+}
+.clear-btn:hover{
+    background: rgba(248, 113, 113, 0.15);
+}
+.clear-btn:active{
+    background: rgba(248, 113, 113, 0.25);
+}
