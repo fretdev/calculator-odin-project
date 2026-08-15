@@ -16,16 +16,21 @@ calculatorButtons.forEach((button)=>{
     button.addEventListener('click',(e)=>{
         const value = e.target.textContent
         if(!isNaN(value) || value == "."){
-            handleNumber(value)
+            handleNumber(value)  
         }
-        if(['+','-','*','/','±'].includes(value)){
+        if(['+','-','*','/'].includes(value)){
             handleOperator(value)
+        }
+        if(value == '±'){
+            handleSignToggle()
         }
         if(value == "="){
             handleEquals()
+            handleResultOperation()
         }
         if(value == "%"){
             handlePercentage()
+            handleResultOperation()
         }
         updateDisplay()
     })
@@ -35,12 +40,13 @@ clearButton.addEventListener('click',clearDisplay)
 
 
 // Helper functions
-
 function handleNumber(value){
     if(calculatorState.operator == ""){
-        calculatorState.firstInput += value
+        if(value == "." && calculatorState.firstInput.includes("."))return
+        calculatorState.firstInput +=value
     }
     else{
+        if(value == "." && calculatorState.secondInput.includes("."))return
         calculatorState.secondInput += value
     }
 }
@@ -49,11 +55,18 @@ function handleOperator(value){
     if(calculatorState.firstInput == ""){
         return
     }
+    if(calculatorState.firstInput == calculatorState.result){
+        calculatorState.operator = value
+    }
     calculatorState.operator = value
 }
-  
 
-
+function handleSignToggle(){
+    let activeKey = calculatorState.operator =="" ? "firstInput" : "secondInput"
+    if(calculatorState[activeKey] !== ""){
+        calculatorState[activeKey] = (Number(calculatorState[activeKey]) * -1).toString()
+    }
+}
 function handleEquals(){
     switch(calculatorState.operator){
         case '+':addition()
@@ -64,6 +77,13 @@ function handleEquals(){
         break
         case '/':division()
         break
+    }
+}
+
+function handleResultOperation(value){
+    if(calculatorState.result){               
+        outputDisplay.textContent=""
+        updateDisplayForResultOperation()
     }
 }
 
@@ -81,7 +101,21 @@ function division(){
     calculatorState.result  = Number(calculatorState.firstInput) / Number(calculatorState.secondInput)
 }
 function handlePercentage(){
-    calculatorState.result = Number(calculatorState.firstInput)/100
+    if(calculatorState.firstInput && calculatorState.operator && calculatorState.secondInput){
+         switch(calculatorState.operator){
+            case '+': calculatorState.result = Number(calculatorState.firstInput) + Number(calculatorState.firstInput) * Number(calculatorState.secondInput)/100
+            break
+            case '-': calculatorState.result = Number(calculatorState.firstInput) - Number(calculatorState.firstInput) * Number(calculatorState.secondInput)/100
+            break
+            case '*': calculatorState.result = Number(calculatorState.firstInput) * Number(calculatorState.secondInput)/100
+            break
+            case '/': calculatorState.result = Number(calculatorState.firstInput) / Number(calculatorState.secondInput)*100
+            break
+         }
+    }
+    else{
+        calculatorState.result = Number(calculatorState.firstInput)/100
+    }
     outputDisplay.textContent = calculatorState.result
 }
 
@@ -109,7 +143,11 @@ function clearDisplay(){
     outputDisplay.textContent=""
     
 }
-
+function updateDisplayForResultOperation(){
+    calculatorState.firstInput=calculatorState.result
+    calculatorState.operator=""
+    calculatorState.secondInput=""
+}
 
 
 function test(){
