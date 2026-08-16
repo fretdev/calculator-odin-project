@@ -35,6 +35,27 @@ calculatorButtons.forEach((button)=>{
         updateDisplay()
     })
 })
+document.addEventListener('keydown',(e)=>{
+    let key = e.key
+    if((key >= '0' && key <= '9') || key === '.'){
+        handleNumber(key)
+    }
+    else if(['+','-','*','/'].includes(key)){
+        handleOperator(key)
+    }
+    else if(key === 'Enter' || key === '='){
+        e.preventDefault()
+        handleEquals()
+        handleResultOperation()
+    }
+    else if(key === 'Backspace'){
+        backspace()
+    }
+    else if(key === 'Escape'){
+        clearDisplay()
+    }
+    updateDisplay()
+})
 
 clearButton.addEventListener('click',clearDisplay)
 deleteButton.addEventListener('click',backspace)
@@ -73,15 +94,9 @@ function handleSignToggle(){
     }
 }
 function handleEquals(){
-    switch(calculatorState.operator){
-        case '+':addition()
-        break
-        case '-':subtraction()
-        break
-        case '*':multiplication()
-        break
-        case '/':division()
-        break
+    if(calculatorState.firstInput !== "" && calculatorState.operator !== "" && calculatorState.secondInput !== ""){
+        calculatorState.result = operate(calculatorState.operator,calculatorState.firstInput,calculatorState.secondInput)
+        calculatorState.result = roundResult(calculatorState.result)
     }
 }
 
@@ -96,23 +111,21 @@ function handleResultOperation(){
 }
 
 // Calculator logic
-function addition(){
-    calculatorState.result = Number(calculatorState.firstInput) + Number(calculatorState.secondInput)
-}
-function subtraction(){
-    calculatorState.result = Number(calculatorState.firstInput) - Number(calculatorState.secondInput)
-}
-function multiplication(){
-    calculatorState.result = Number(calculatorState.firstInput) * Number(calculatorState.secondInput)
-}
-function division(){
-    const secondNumber =Number(calculatorState.secondInput)
-    if(secondNumber === 0){
-        calculatorState.result = "Error"
-    }else{
-        calculatorState.result  = Number(calculatorState.firstInput) / Number(calculatorState.secondInput)
+function operate(operator,a,b){
+    const num1 = Number(a)
+    const num2 = Number(b)
 
-    }  
+    switch(operator){
+        case "+": return num1 + num2
+        case "-": return num1 - num2
+        case "*": return num1 * num2
+        case "/": return num2 === 0 ? "Error" : num1 / num2
+        default: return null
+    }
+}
+function roundResult(num){
+    if(num === "Error") return "Error"
+    return Math.round(num * 100000000) / 100000000
 }
 function handlePercentage(){
     if(calculatorState.firstInput && calculatorState.operator && calculatorState.secondInput){
