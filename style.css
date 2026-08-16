@@ -46,7 +46,7 @@ body{
     background: var(--background);
     display: flex;
     justify-content: center;
-    padding-top: 5rem;
+    padding-top: 8rem;
 }
 .container{
     width: 24rem;
@@ -127,10 +127,22 @@ body{
 }
 .clear-btn{
     color: var(--danger);
+    transform: scale(0.97);
 }
 .clear-btn:hover{
     background: rgba(248, 113, 113, 0.15);
 }
 .clear-btn:active{
     background: rgba(248, 113, 113, 0.25);
+}
+
+@media (max-width: 420px) {
+    .container{
+    width: 20rem;
+}
+}
+@media (max-width: 350px) {
+    .container{
+    width: 17rem;
+}
 }

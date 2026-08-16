@@ -16,7 +16,7 @@ calculatorButtons.forEach((button)=>{
     button.addEventListener('click',(e)=>{
         const value = e.target.textContent
         if(!isNaN(value) || value == "."){
-            handleNumber(value)  
+            handleNumber(value)
         }
         if(['+','-','*','/'].includes(value)){
             handleOperator(value)
@@ -37,10 +37,15 @@ calculatorButtons.forEach((button)=>{
 })
 
 clearButton.addEventListener('click',clearDisplay)
+deleteButton.addEventListener('click',backspace)
 
 
 // Helper functions
 function handleNumber(value){
+    if(calculatorState.result !=="" && calculatorState.operator == ""){
+        calculatorState.firstInput = ""
+        calculatorState.result=""
+    }
     if(calculatorState.operator == ""){
         if(value == "." && calculatorState.firstInput.includes("."))return
         calculatorState.firstInput +=value
@@ -80,10 +85,13 @@ function handleEquals(){
     }
 }
 
-function handleResultOperation(value){
+function handleResultOperation(){
     if(calculatorState.result){               
         outputDisplay.textContent=""
         updateDisplayForResultOperation()
+    }
+    if(calculatorState.result =="Error"){
+        calculatorState.firstInput=""
     }
 }
 
@@ -98,7 +106,13 @@ function multiplication(){
     calculatorState.result = Number(calculatorState.firstInput) * Number(calculatorState.secondInput)
 }
 function division(){
-    calculatorState.result  = Number(calculatorState.firstInput) / Number(calculatorState.secondInput)
+    const secondNumber =Number(calculatorState.secondInput)
+    if(secondNumber === 0){
+        calculatorState.result = "Error"
+    }else{
+        calculatorState.result  = Number(calculatorState.firstInput) / Number(calculatorState.secondInput)
+
+    }  
 }
 function handlePercentage(){
     if(calculatorState.firstInput && calculatorState.operator && calculatorState.secondInput){
@@ -147,6 +161,19 @@ function updateDisplayForResultOperation(){
     calculatorState.firstInput=calculatorState.result
     calculatorState.operator=""
     calculatorState.secondInput=""
+}
+
+function backspace(){
+    if(calculatorState.operator==""){
+        calculatorState.firstInput = calculatorState.firstInput.toString().slice(0,-1)
+    }
+    else if(calculatorState.secondInput!=""){
+        calculatorState.secondInput = calculatorState.secondInput.toString().slice(0,-1)
+    }  
+    else{
+        calculatorState.operator =""
+    }
+    updateDisplay()
 }
 
 
