@@ -78,11 +78,13 @@ function handleNumber(value){
 }
 
 function handleOperator(value){
-    if(calculatorState.firstInput == ""){
-        return
-    }
-    if(calculatorState.firstInput == calculatorState.result){
-        calculatorState.operator = value
+    if(calculatorState.firstInput == "")return
+    if(calculatorState.secondInput !== ""){
+        calculatorState.result = operate(calculatorState.operator,calculatorState.firstInput,calculatorState.secondInput)
+        calculatorState.result = roundResult(calculatorState.result)
+        calculatorState.firstInput = calculatorState.result === "Error" ? "" : calculatorState.result.toString()
+        calculatorState.secondInput=""
+        outputDisplay.textContent = calculatorState.result
     }
     calculatorState.operator = value
 }
@@ -111,15 +113,27 @@ function handleResultOperation(){
 }
 
 // Calculator logic
+function add(a,b){
+    return a + b
+}
+function subtract(a,b){
+    return a - b
+}
+function multiply(a,b){
+    return a * b
+}
+function divide(a,b){
+    return b === 0 ? "Error" : a / b
+}
 function operate(operator,a,b){
     const num1 = Number(a)
     const num2 = Number(b)
 
     switch(operator){
-        case "+": return num1 + num2
-        case "-": return num1 - num2
-        case "*": return num1 * num2
-        case "/": return num2 === 0 ? "Error" : num1 / num2
+        case "+": return add(num1,num2)
+        case "-": return subtract(num1,num2)
+        case "*": return multiply(num1,num2)
+        case "/": return divide(num1,num2)
         default: return null
     }
 }
