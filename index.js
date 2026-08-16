@@ -4,6 +4,7 @@ const outputDisplay = document.querySelector('.output')
 const calculatorButtons = document.querySelectorAll('.btn')
 const clearButton = document.querySelector('.clear-btn')
 const deleteButton = document.querySelector('.delete-btn')
+const PRECISION_FACTOR = 100000000
 
 const calculatorState = {
     firstInput: "",
@@ -139,23 +140,25 @@ function operate(operator,a,b){
 }
 function roundResult(num){
     if(num === "Error") return "Error"
-    return Math.round(num * 100000000) / 100000000
+    return Math.round(num *PRECISION_FACTOR) / PRECISION_FACTOR
 }
 function handlePercentage(){
     if(calculatorState.firstInput && calculatorState.operator && calculatorState.secondInput){
+        const num1 = Number(calculatorState.firstInput)
+        const num2 = Number(calculatorState.secondInput)
          switch(calculatorState.operator){
-            case '+': calculatorState.result = Number(calculatorState.firstInput) + Number(calculatorState.firstInput) * Number(calculatorState.secondInput)/100
+            case '+': calculatorState.result = add(num1,divide(multiply(num1,num2),100))
             break
-            case '-': calculatorState.result = Number(calculatorState.firstInput) - Number(calculatorState.firstInput) * Number(calculatorState.secondInput)/100
+            case '-': calculatorState.result = subtract(num1, divide(multiply(num1, num2), 100))
             break
-            case '*': calculatorState.result = Number(calculatorState.firstInput) * Number(calculatorState.secondInput)/100
+            case '*': calculatorState.result = divide(multiply(num1, num2), 100)
             break
-            case '/': calculatorState.result = Number(calculatorState.firstInput) / Number(calculatorState.secondInput)*100
+            case '/': calculatorState.result = multiply(divide(num1, num2), 100)
             break
          }
     }
     else{
-        calculatorState.result = Number(calculatorState.firstInput)/100
+        calculatorState.result = divide(Number(calculatorState.firstInput), 100)
     }
     outputDisplay.textContent = calculatorState.result
 }
